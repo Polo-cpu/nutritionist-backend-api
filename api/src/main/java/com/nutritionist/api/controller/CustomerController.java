@@ -1,5 +1,6 @@
 package com.nutritionist.api.controller;
 
+import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class CustomerController {
         return new ResponseEntity<CustomerEntity>(customer,HttpStatus.OK);
     }
     @PostMapping("/add")
-    public ResponseEntity<CustomerEntity> addCustomer(@RequestBody CustomerEntity customer){
-        CustomerEntity add = customerService.addCustomer(customer);
+    public ResponseEntity<CustomerEntity> addCustomer(@RequestBody CustomerDto customerDto){
+        CustomerEntity add = customerService.addCustomer(customerDto);
         return new ResponseEntity<CustomerEntity>(add,HttpStatus.CREATED);
     }
     @DeleteMapping("/delete/{id}")
