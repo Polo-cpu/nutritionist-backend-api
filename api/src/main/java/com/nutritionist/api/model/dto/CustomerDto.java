@@ -13,7 +13,7 @@ public class CustomerDto {
 
     private String nameDto;
     private String sexDto;
-    private int ageDto;
-    private double heightDto;
-    private double weightDto;
+    private Integer ageDto;
+    private Double heightDto;
+    private Double weightDto;
 }

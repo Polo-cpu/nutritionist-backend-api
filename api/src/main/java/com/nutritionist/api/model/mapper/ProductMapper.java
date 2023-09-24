@@ -12,7 +12,7 @@ import org.mapstruct.Mappings;
 public interface ProductMapper {
     @Mappings({
             @Mapping(source = "productNameDto",target = "productName"),
-            @Mapping(source = "productDetailsDto",target = "productsDetails"),
+            @Mapping(source = "productDetailsDto",target = "productDetails"),
             @Mapping(source = "productPriceDto",target = "productPrice")})
     public ProductEntity productDTO2ProductEntity(ProductDto productDto);
 }

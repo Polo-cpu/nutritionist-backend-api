@@ -24,11 +24,11 @@ public class CustomerEntity {
     @Column(name = "customer_sex")
     private String sex;
     @Column(name = "customer_age")
-    private int age;
+    private Integer age;
     @Column(name = "customer_height")
-    private double height;
+    private Double height;
     @Column(name = "customer_weight")
-    private double weight;
+    private Double weight;
 
     public void setId(Long id) {
         this.id = id;
