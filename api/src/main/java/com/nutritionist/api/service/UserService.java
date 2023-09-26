@@ -15,14 +15,12 @@ public class UserService {
     public List<UserEntity> findAll(){
         return userRepository.findAll();
     }
-    public UserEntity getByUserName(String name){
-        return userRepository.getByName(name);
-    }
+
     public UserEntity createUser(UserEntity user){
         return userRepository.save(user);
     }
-    public void deleteUserById(Long id){
-        userRepository.deleteById(id);
+    public UserEntity login(UserEntity user){
+
     }
 
 
