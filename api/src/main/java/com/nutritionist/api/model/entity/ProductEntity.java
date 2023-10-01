@@ -21,21 +21,6 @@ public class ProductEntity {
     @Column(name = "product_details")
     private String productDetails;
     @Column(name = "product_price")
-    private String productPrice;
+    private Double productPrice;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setProductDetails(String productDetails) {
-        this.productDetails = productDetails;
-    }
-
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
-    }
 }

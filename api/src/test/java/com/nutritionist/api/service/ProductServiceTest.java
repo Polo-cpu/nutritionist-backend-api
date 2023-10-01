@@ -84,10 +84,10 @@ public class ProductServiceTest {
     }
     public List<ProductEntity> sampleProductList(){
         List<ProductEntity> sampleProducts = new ArrayList<>();
-        ProductEntity customer1 = new ProductEntity(1L,"creatine","medicine","5$");
-        ProductEntity customer2 = new ProductEntity(2L,"dumbbell","sport","10$");
-        ProductEntity customer3 = new ProductEntity(3L,"rope","sport","2$");
-        ProductEntity customer4 = new ProductEntity(4L,"slimming_cure","slimming","1$");
+        ProductEntity customer1 = new ProductEntity(1L,"creatine","medicine",5.0);
+        ProductEntity customer2 = new ProductEntity(2L,"dumbbell","sport",10.0);
+        ProductEntity customer3 = new ProductEntity(3L,"rope","sport",2.0);
+        ProductEntity customer4 = new ProductEntity(4L,"slimming_cure","slimming",1.0);
         sampleProducts.add(customer1);
         sampleProducts.add(customer2);
         sampleProducts.add(customer3);

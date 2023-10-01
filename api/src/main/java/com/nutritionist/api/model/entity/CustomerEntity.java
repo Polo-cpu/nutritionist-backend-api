@@ -6,6 +6,7 @@ import lombok.*;
 
 
 
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -30,27 +31,4 @@ public class CustomerEntity {
     @Column(name = "customer_weight")
     private Double weight;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
 }

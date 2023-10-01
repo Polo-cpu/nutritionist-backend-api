@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,35 +24,39 @@ public class CustomerController {
         this.customerService = customerService;
     }
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CustomerEntity>> getAll(){
         List<CustomerEntity> allCustomers = customerService.getAll();
-        log.info("");
+
         return new ResponseEntity<List<CustomerEntity>>(allCustomers, HttpStatus.OK);
     }
     @GetMapping("/{no}/{size}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Page<CustomerEntity>> getCustomersWithPagination(@PathVariable int no,
                                                                            @PathVariable int size){
         Page<CustomerEntity> customersWithPagination = customerService.getCustomersWithPagination(no,size);
-        log.info("");
+
         return new ResponseEntity<Page<CustomerEntity>>(customersWithPagination, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<CustomerEntity> getById(@PathVariable("id") Long id){
         CustomerEntity customer = customerService.getById(id);
-        log.info("");
+
         return new ResponseEntity<CustomerEntity>(customer,HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<CustomerEntity> addCustomer(@RequestBody CustomerDto customerDto){
         CustomerEntity add = customerService.addCustomer(customerDto);
-        log.info("");
+
         return new ResponseEntity<CustomerEntity>(add,HttpStatus.CREATED);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomerById(@PathVariable("id") Long id){
-        customerService.deleteById(id);
-        log.info("");
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    public ResponseEntity<CustomerEntity> deleteCustomerById(@PathVariable("id") Long id){
+        CustomerEntity deletedCustomer = customerService.deleteById(id);
+        return new ResponseEntity<CustomerEntity>(deletedCustomer,HttpStatus.ACCEPTED);
     }
 }
