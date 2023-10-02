@@ -50,7 +50,7 @@ public class ProductService {
 
     public ProductEntity addProduct(ProductDto productDto){
         log.info("a customer is adding");
-        ProductEntity productDto2product = productMapper.productDTO2ProductEntity(productDto);
+        ProductEntity productDto2product = productMapper.toProductEntity(productDto);
         return productRepository.save(productDto2product);
     }
 

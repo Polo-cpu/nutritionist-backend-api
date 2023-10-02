@@ -14,5 +14,5 @@ public interface ProductMapper {
             @Mapping(source = "productNameDto",target = "productName"),
             @Mapping(source = "productDetailsDto",target = "productDetails"),
             @Mapping(source = "productPriceDto",target = "productPrice")})
-    public ProductEntity productDTO2ProductEntity(ProductDto productDto);
+    public ProductEntity toProductEntity(ProductDto productDto);
 }

@@ -58,7 +58,7 @@ public class CustomerService{
 
     public CustomerEntity addCustomer(CustomerDto customerDto){
         log.info("Customer added successfully!");
-        CustomerEntity customerDto2customer = customerMapper.customerDTO2CustomerEntity(customerDto);
+        CustomerEntity customerDto2customer = customerMapper.toCustomerEntity(customerDto);
         return customerRepository.save(customerDto2customer);
     }
 

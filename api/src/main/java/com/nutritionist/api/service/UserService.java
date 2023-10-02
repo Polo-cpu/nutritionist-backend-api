@@ -3,6 +3,7 @@ package com.nutritionist.api.service;
 import com.nutritionist.api.model.entity.UserEntity;
 import com.nutritionist.api.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
     @Autowired
     private UserRepository userRepository;
