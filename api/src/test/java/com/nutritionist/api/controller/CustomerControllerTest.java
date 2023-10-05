@@ -1,21 +1,23 @@
 package com.nutritionist.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nutritionist.api.exception.CustomerNotFoundException;
 import com.nutritionist.api.exception.handler.GenericExceptionHandler;
 import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
+
 import com.nutritionist.api.model.mapper.CustomerMapper;
+import com.nutritionist.api.model.mapper.CustomerMapperImpl;
 import com.nutritionist.api.service.CustomerService;
-import org.junit.Assert;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,23 +29,25 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 import static org.assertj.core.api.Assertions.assertThat;
 
+
+import java.time.LocalDate;
 import java.util.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CustomerController.class)
-
+@EnableAutoConfiguration
 public class CustomerControllerTest {
-    private CustomerMapper customerMapper;
+    private CustomerMapper customerMapper = new CustomerMapperImpl();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -87,7 +91,7 @@ public class CustomerControllerTest {
     @Test
     void getCustomerById() throws Exception{
         List<CustomerEntity> sampleCustomersList = sampleCustomerList();
-        when(customerService.getById(1L)).thenReturn(sampleCustomersList.get(0));
+        when(customerService.getById(1L)).thenReturn(Optional.ofNullable(sampleCustomersList.get(0)));
         MockHttpServletResponse response = mockMvc.perform(get("/customer/all"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -116,7 +120,7 @@ public class CustomerControllerTest {
         CustomerEntity customer = sampleCustomerList().get(1);
 
         CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00);
-        Mockito.when(customerService.addCustomer(customerDto)).thenReturn(customer);
+        Mockito.when(customerService.create(customerDto)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/add"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -129,10 +133,10 @@ public class CustomerControllerTest {
 
     public List<CustomerEntity> sampleCustomerList(){
         List<CustomerEntity> sampleCustomers = new ArrayList<>();
-        CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0);
-        CustomerEntity customer2 = new CustomerEntity(2L,"marie","female",25,155.0,88.0);
-        CustomerEntity customer3 = new CustomerEntity(3L,"steve","male",42,175.0,142.0);
-        CustomerEntity customer4 = new CustomerEntity(4L,"eve","female",19,165.0,91.0);
+        CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0, LocalDate.now());
+        CustomerEntity customer2 = new CustomerEntity(2L,"marie","female",25,155.0,88.0,LocalDate.now());
+        CustomerEntity customer3 = new CustomerEntity(3L,"steve","male",42,175.0,142.0,LocalDate.now());
+        CustomerEntity customer4 = new CustomerEntity(4L,"eve","female",19,165.0,91.0,LocalDate.now());
         sampleCustomers.add(customer1);
         sampleCustomers.add(customer2);
         sampleCustomers.add(customer3);

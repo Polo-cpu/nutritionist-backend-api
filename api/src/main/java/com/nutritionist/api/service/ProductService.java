@@ -6,6 +6,7 @@ import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.mapper.ProductMapper;
 import com.nutritionist.api.repository.ProductRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,14 +20,12 @@ import java.util.List;
 @Service
 @ComponentScan("com.nutritionist.api.service.ProductService.class")
 @Slf4j
+@AllArgsConstructor
 public class ProductService {
     private ProductRepository productRepository;
     private ProductMapper productMapper;
     private ProductComparatorService productComparatorService;
-    @Autowired
-    public ProductService(ProductRepository productRepository){
-        this.productRepository = productRepository;
-    }
+
 
     public List<ProductEntity> getAll(){
         log.info("all products are showing");

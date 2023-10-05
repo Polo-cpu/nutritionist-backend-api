@@ -7,6 +7,8 @@ import com.nutritionist.api.model.dto.ProductDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.mapper.CustomerMapper;
+import com.nutritionist.api.model.mapper.ProductMapper;
+import com.nutritionist.api.model.mapper.ProductMapperImpl;
 import com.nutritionist.api.service.CustomerService;
 import com.nutritionist.api.service.ProductService;
 import org.junit.jupiter.api.Assertions;
@@ -34,6 +36,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 public class ProductControllerTest {
+    private ProductMapper productMapper = new ProductMapperImpl();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -105,7 +108,7 @@ public class ProductControllerTest {
     void addCustomer() throws Exception{
         ProductEntity product = sampleProductList().get(1);
 
-        ProductDto productDto = new ProductDto("abc","medicine","10$");
+        ProductDto productDto = new ProductDto("abc","medicine",10.0);
         Mockito.when(productService.addProduct(productDto)).thenReturn(product);
         MockHttpServletResponse response = mockMvc.perform(get("/product/add"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)

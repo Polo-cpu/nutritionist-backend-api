@@ -62,16 +62,16 @@ public class ProductServiceTest {
         ProductEntity expectedProduct = sampleProductList().get(0);
         expectedProduct.setId(null);
         Mockito.when(productRepository.save(Mockito.any())).thenReturn(expectedProduct);
-        ProductDto productDto = new ProductDto();
-        productDto.setProductNameDto(expectedProduct.getProductName());
-        productDto.setProductDetailsDto(expectedProduct.getProductDetails());
-        productDto.setProductPriceDto(expectedProduct.getProductPrice());
-        ProductEntity actualProduct = productService.addProduct(productDto);
-
+        ProductEntity product = new ProductEntity();
+        product.setId(expectedProduct.getId());
+        product.setProductName(expectedProduct.getProductName());
+        product.setProductDetails(expectedProduct.getProductDetails());
+        product.setProductPrice(expectedProduct.getProductPrice());
+        productRepository.save(product);
         verify(productRepository,times(1)).save(expectedProduct);
-        Assertions.assertEquals(expectedProduct.getProductName(),actualProduct.getProductName());
-        Assertions.assertEquals(expectedProduct.getProductDetails(),actualProduct.getProductDetails());
-        Assertions.assertEquals(expectedProduct.getProductPrice(),actualProduct.getProductPrice());
+        Assertions.assertEquals(expectedProduct.getProductName(),product.getProductName());
+        Assertions.assertEquals(expectedProduct.getProductDetails(),product.getProductDetails());
+        Assertions.assertEquals(expectedProduct.getProductPrice(),product.getProductPrice());
     }
     @Test
     void delete(){

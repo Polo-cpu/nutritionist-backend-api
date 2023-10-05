@@ -13,42 +13,52 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.*;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 
-import javax.servlet.Filter;
+import javax.servlet.*;
+import javax.sql.DataSource;
+
+
 import java.util.ArrayList;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    @Autowired
+    private DataSource dataSource;
+    public void configure(HttpSecurity http) throws Exception{
+        http.httpBasic();
         http
-                .csrf()
-                .disable()
-                .authorizeRequests()
-                .regexMatchers("")
-                .permitAll()
-                .anyRequest()
+                .authorizeHttpRequests()
+                .antMatchers()
                 .authenticated()
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore((Filter) jwtAuthenticationFilter, (Class<? extends Filter>) UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .authorizeHttpRequests()
+                .anyRequest()
+                .permitAll();
     }
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+        authenticationManagerBuilder
+                .jdbcAuthentication()
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .dataSource(dataSource)
+                .usersByUsernameQuery("SELECT username, password, ENABLED FROM users where username=?")
+                .authoritiesByUsernameQuery("SELECT username, role FROM users WHERE username=?");
+    }
+
+
 
 }

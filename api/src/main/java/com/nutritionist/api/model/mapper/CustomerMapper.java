@@ -7,11 +7,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
+
     @Mappings({
-            @Mapping(source = "nameDto",target = "name"),
-            @Mapping(source = "sexDto",target = "sex"),
-            @Mapping(source = "ageDto",target = "age"),
-            @Mapping(source = "heightDto",target = "height"),
-            @Mapping(source = "weightDto",target = "weight")})
-    public CustomerEntity toCustomerEntity(CustomerDto customerDto);
+            @Mapping(source = "nameDto", target = "name"),
+            @Mapping(source = "sexDto", target = "sex"),
+            @Mapping(source = "ageDto", target = "age"),
+            @Mapping(source = "heightDto", target = "height"),
+            @Mapping(source = "weightDto", target = "weight")})
+    CustomerEntity toCustomerEntity(CustomerDto customerDto);
+
+
+
+
 }

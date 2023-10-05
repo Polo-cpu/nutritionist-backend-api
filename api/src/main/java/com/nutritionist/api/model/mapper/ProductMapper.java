@@ -10,9 +10,10 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
+
     @Mappings({
             @Mapping(source = "productNameDto",target = "productName"),
             @Mapping(source = "productDetailsDto",target = "productDetails"),
             @Mapping(source = "productPriceDto",target = "productPrice")})
-    public ProductEntity toProductEntity(ProductDto productDto);
+    ProductEntity toProductEntity(ProductDto productDto);
 }

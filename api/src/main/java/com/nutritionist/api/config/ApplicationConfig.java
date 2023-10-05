@@ -3,6 +3,7 @@ package com.nutritionist.api.config;
 import com.nutritionist.api.exception.UserNotFoundException;
 import com.nutritionist.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
+    @Autowired
     private final UserRepository userRepository;
     @Bean
     public UserDetailsService userDetailsService(){
@@ -37,5 +39,6 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 }

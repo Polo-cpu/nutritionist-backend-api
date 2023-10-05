@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -41,15 +42,14 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<CustomerEntity> getById(@PathVariable("id") Long id){
-        CustomerEntity customer = customerService.getById(id);
-
-        return new ResponseEntity<CustomerEntity>(customer,HttpStatus.OK);
+    public ResponseEntity<Optional<CustomerEntity>> getById(@PathVariable("id") Long id){
+        Optional<CustomerEntity> byId = customerService.getById(id);
+        return new ResponseEntity<Optional<CustomerEntity>>(byId,HttpStatus.OK);
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<CustomerEntity> addCustomer(@RequestBody CustomerDto customerDto){
-        CustomerEntity add = customerService.addCustomer(customerDto);
+        CustomerEntity add = customerService.create(customerDto);
 
         return new ResponseEntity<CustomerEntity>(add,HttpStatus.CREATED);
     }

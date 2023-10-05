@@ -27,11 +27,24 @@ public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping("/all")
-    public List<UserEntity> findAll(){
-        return userService.findAll();
+    public ResponseEntity<List<UserEntity>> findAll(){
+        List<UserEntity> users = userService.findAll();
+        return new ResponseEntity<List<UserEntity>>(users,HttpStatus.OK);
     }
-    public String
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
+    public ResponseEntity<UserEntity> addUser(@RequestBody UserEntity user) {
+        UserEntity add = userService.addUser(user);
+        return new ResponseEntity<UserEntity>(add, HttpStatus.CREATED);
+
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{}")
+    public ResponseEntity<Void> deleteUser(Long id){
+        userService.deleteUser(id);
+        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    }
 
 
 

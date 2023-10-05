@@ -3,8 +3,7 @@ package com.nutritionist.api.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-
+import java.time.LocalDate;
 
 
 @Data
@@ -30,5 +29,8 @@ public class CustomerEntity {
     private Double height;
     @Column(name = "customer_weight")
     private Double weight;
+    @Column(name = "local_time")
+    private LocalDate startOperation;
+
 
 }
