@@ -24,6 +24,7 @@ public class CustomerController {
     public CustomerController(CustomerService customerService){
         this.customerService = customerService;
     }
+
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CustomerEntity>> getAll(){

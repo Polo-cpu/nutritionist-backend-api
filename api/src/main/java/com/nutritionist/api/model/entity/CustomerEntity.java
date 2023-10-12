@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Data
@@ -21,8 +22,8 @@ public class CustomerEntity {
     private Long id;
     @Column(name = "customer_name")
     private String name;
-    @Column(name = "customer_sex")
-    private String sex;
+    @Column(name = "customer_gender")
+    private String gender;
     @Column(name = "customer_age")
     private Integer age;
     @Column(name = "customer_height")
@@ -31,6 +32,12 @@ public class CustomerEntity {
     private Double weight;
     @Column(name = "local_time")
     private LocalDate startOperation;
+    @ManyToOne
+    @JoinColumn(name = "nutritionist_id")
+    private NutritionistEntity nutritionist;
+    @ManyToMany
+    @JoinColumn
+    private List<ProductEntity> products;
 
 
 }

@@ -17,10 +17,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CustomerDto {
     @NotEmpty
-    private String nameDto;
+    private String name;
     @NotEmpty
-    private String sexDto;
-    private Integer ageDto;
-    private Double heightDto;
-    private Double weightDto;
+    private String gender;
+    @NotEmpty
+    private Integer age;
+    @NotEmpty
+    private Double height;
+    @NotEmpty
+    private Double weight;
+    @NotEmpty
+    private LocalDate startOperation;
 }

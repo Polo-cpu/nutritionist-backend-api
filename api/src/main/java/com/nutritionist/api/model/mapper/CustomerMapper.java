@@ -9,11 +9,12 @@ import org.mapstruct.Mappings;
 public interface CustomerMapper {
 
     @Mappings({
-            @Mapping(source = "nameDto", target = "name"),
-            @Mapping(source = "sexDto", target = "sex"),
-            @Mapping(source = "ageDto", target = "age"),
-            @Mapping(source = "heightDto", target = "height"),
-            @Mapping(source = "weightDto", target = "weight")})
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "gender", target = "gender"),
+            @Mapping(source = "age", target = "age"),
+            @Mapping(source = "height", target = "height"),
+            @Mapping(source = "weight", target = "weight"),
+            @Mapping(source = "startOperation",target = "startOperation")})
     CustomerEntity toCustomerEntity(CustomerDto customerDto);
 
 

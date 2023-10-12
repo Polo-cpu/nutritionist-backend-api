@@ -3,6 +3,8 @@ package com.nutritionist.api.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import lombok.*;
 @Table(name = "nutritionist")
 public class NutritionistEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name="id")
     private Long id;
     @Column(name="nutritionist_name")
@@ -22,5 +24,7 @@ public class NutritionistEntity {
     private String profession;
     @Column(name="availability")
     private Boolean isAvailable;
+    @OneToMany(mappedBy = "nutritionist")
+    private List<CustomerEntity> customers;
 
 }

@@ -32,10 +32,11 @@ public class UserEntity{
 
     @Column(unique = true, nullable = false, name = "password")
     private String password;
-    @Column(name = "role")
-    private Role role;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToMany
+    @JoinTable(name = "user_role",
+    joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "user_id")},
+    inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")})
     private Set<Role> roles;
 
 

@@ -5,6 +5,8 @@ import com.nutritionist.api.exception.handler.GenericExceptionHandler;
 import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 
+import com.nutritionist.api.model.entity.NutritionistEntity;
+import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.CustomerMapperImpl;
 import com.nutritionist.api.service.CustomerService;
@@ -119,7 +121,7 @@ public class CustomerControllerTest {
     void addCustomer() throws Exception{
         CustomerEntity customer = sampleCustomerList().get(1);
 
-        CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00);
+        CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00,LocalDate.now());
         Mockito.when(customerService.create(customerDto)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/add"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
@@ -133,14 +135,16 @@ public class CustomerControllerTest {
 
     public List<CustomerEntity> sampleCustomerList(){
         List<CustomerEntity> sampleCustomers = new ArrayList<>();
-        CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0, LocalDate.now());
-        CustomerEntity customer2 = new CustomerEntity(2L,"marie","female",25,155.0,88.0,LocalDate.now());
-        CustomerEntity customer3 = new CustomerEntity(3L,"steve","male",42,175.0,142.0,LocalDate.now());
-        CustomerEntity customer4 = new CustomerEntity(4L,"eve","female",19,165.0,91.0,LocalDate.now());
+        CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0,LocalDate.now(),null,null);
+        CustomerEntity customer2 = new CustomerEntity(2L,"marie","female",25,155.0,88.0,LocalDate.now(),null,null);
+        CustomerEntity customer3 = new CustomerEntity(3L,"steve","male",42,175.0,142.0,LocalDate.now(),null,null);
+        CustomerEntity customer4 = new CustomerEntity(4L,"eve","female",19,165.0,91.0,LocalDate.now(),null,null);
         sampleCustomers.add(customer1);
         sampleCustomers.add(customer2);
         sampleCustomers.add(customer3);
         sampleCustomers.add(customer4);
         return sampleCustomers;
     }
+
+
 }

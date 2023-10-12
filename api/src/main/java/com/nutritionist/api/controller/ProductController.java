@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequestMapping("/product")
@@ -40,10 +42,10 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ProductEntity> getById(@PathVariable("id") Long id){
-        ProductEntity product = productService.getById(id);
+    public ResponseEntity<Optional<ProductEntity>> findById(@PathVariable("id") Long id){
+        Optional<ProductEntity> byId = productService.getById(id);
 
-        return new ResponseEntity<ProductEntity>(product,HttpStatus.OK);
+        return new ResponseEntity<Optional<ProductEntity>>(byId,HttpStatus.OK);
     }
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -58,12 +60,6 @@ public class ProductController {
     public ResponseEntity<ProductEntity> deleteProductById(@PathVariable("id") Long id){
         ProductEntity deletedProduct = productService.deleteById(id);
         return new ResponseEntity<ProductEntity>(deletedProduct,HttpStatus.ACCEPTED);
-    }
-    @GetMapping("/compare/{}/{}")
-    public ResponseEntity<String> getCompareProducts(@PathVariable("id1") Long id1,
-                                                     @PathVariable("id2") Long id2){
-        String massage = productService.compareProductPrices(id1,id2);
-        return new ResponseEntity<String>(massage,HttpStatus.OK);
     }
 
 

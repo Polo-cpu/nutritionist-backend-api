@@ -1,6 +1,7 @@
 package com.nutritionist.api.exception.handler;
 
 import com.nutritionist.api.exception.CustomerNotFoundException;
+import com.nutritionist.api.exception.NutritionistNotFoundException;
 import com.nutritionist.api.exception.ProductException;
 import com.nutritionist.api.exception.UserNotFoundException;
 import com.nutritionist.api.model.entity.UserEntity;
@@ -30,6 +31,13 @@ public class GenericExceptionHandler {
     }
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<Map<String,String>> handleCustomerNotFoundException(CustomerNotFoundException exception){
+        Map<String,String> errorMap = new HashMap<>();
+        errorMap.put("error_message",exception.getMessage());
+        errorMap.put("error_cause",exception.getCause().toString());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMap);
+    }
+    @ExceptionHandler(NutritionistNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handleNutritionistNotFoundException(NutritionistNotFoundException exception){
         Map<String,String> errorMap = new HashMap<>();
         errorMap.put("error_message",exception.getMessage());
         errorMap.put("error_cause",exception.getCause().toString());

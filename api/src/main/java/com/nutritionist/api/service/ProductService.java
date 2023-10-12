@@ -1,5 +1,6 @@
 package com.nutritionist.api.service;
 
+import com.nutritionist.api.exception.CustomerNotFoundException;
 import com.nutritionist.api.exception.ProductException;
 import com.nutritionist.api.model.dto.ProductDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
@@ -16,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @ComponentScan("com.nutritionist.api.service.ProductService.class")
@@ -24,7 +26,6 @@ import java.util.List;
 public class ProductService {
     private ProductRepository productRepository;
     private ProductMapper productMapper;
-    private ProductComparatorService productComparatorService;
 
 
     public List<ProductEntity> getAll(){
@@ -36,14 +37,14 @@ public class ProductService {
         return productRepository.findAll(PageRequest.of(no,size));
     }
 
-    public ProductEntity getById(Long id){
-        ProductEntity productById = productRepository.getReferenceById(id);
-        if(productById == null){
+    public Optional<ProductEntity> getById(Long id){
+        Optional<ProductEntity> byId = productRepository.findById(id);
+        if(byId.isEmpty()){
             log.error("Product not found!");
             throw new ProductException("Product","Not Found");
         }
         else {
-            return productRepository.getReferenceById(id);
+            return byId;
         }
     }
 
@@ -54,21 +55,18 @@ public class ProductService {
     }
 
     public ProductEntity deleteById(Long id){
-        ProductEntity product = getById(id);
-        productRepository.deleteById(id);
-        log.info(product.getProductName() + "is deleted");
-        return product;
-    }
-    public String compareProductPrices(Long id1, Long id2){
-        ProductEntity product1 = productRepository.getReferenceById(id1);
-        ProductEntity product2 = productRepository.getReferenceById(id2);
+        Optional<ProductEntity> byId = productRepository.findById(id);
 
-        if(productComparatorService.compare(product1,product2)!=0){
-            return "Prices :" + " First Product : " + product1.getProductPrice() + " Second Product :" + product2.getProductPrice();
+        if(byId.isEmpty()){
+            log.error("Customer not found!");
+            throw new CustomerNotFoundException("Customer","Not Found");
         }
-        else {
-            return "Product prices are equal";
+        else{
+            log.error("Customer deleted successfully!");
+            productRepository.delete(byId.get());
         }
+
+        return byId.get();
     }
 
 

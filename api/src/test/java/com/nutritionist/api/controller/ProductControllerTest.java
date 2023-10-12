@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -80,7 +81,7 @@ public class ProductControllerTest {
     @Test
     void getProductById() throws Exception{
         List<ProductEntity> sampleProductList = sampleProductList();
-        when(productService.getById(1L)).thenReturn(sampleProductList.get(0));
+        when(productService.getById(1L)).thenReturn(Optional.ofNullable(sampleProductList.get(0)));
         MockHttpServletResponse response = mockMvc.perform(get("/product/1L"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -122,10 +123,10 @@ public class ProductControllerTest {
 
     public List<ProductEntity> sampleProductList(){
         List<ProductEntity> sampleProducts = new ArrayList<>();
-        ProductEntity customer1 = new ProductEntity(1L,"creatine","medicine",5.0);
-        ProductEntity customer2 = new ProductEntity(2L,"dumbbell","sport",10.0);
-        ProductEntity customer3 = new ProductEntity(3L,"rope","sport",2.0);
-        ProductEntity customer4 = new ProductEntity(4L,"slimming_cure","slimming",1.0);
+        ProductEntity customer1 = new ProductEntity(1L,"creatine","medicine",5.0,null);
+        ProductEntity customer2 = new ProductEntity(2L,"dumbbell","sport",10.0,null);
+        ProductEntity customer3 = new ProductEntity(3L,"rope","sport",2.0,null);
+        ProductEntity customer4 = new ProductEntity(4L,"slimming_cure","slimming",1.0,null);
         sampleProducts.add(customer1);
         sampleProducts.add(customer2);
         sampleProducts.add(customer3);

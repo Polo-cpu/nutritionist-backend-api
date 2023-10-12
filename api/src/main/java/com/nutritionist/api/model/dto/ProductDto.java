@@ -1,6 +1,7 @@
 package com.nutritionist.api.model.dto;
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Data
@@ -9,9 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-    private String productNameDto;
-
-    private String productDetailsDto;
-
-    private Double productPriceDto;
+    @NotEmpty
+    private String productName;
+    @NotEmpty
+    private String productDetails;
+    @NotEmpty
+    private Double productPrice;
 }

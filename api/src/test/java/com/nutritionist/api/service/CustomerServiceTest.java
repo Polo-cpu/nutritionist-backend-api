@@ -40,7 +40,7 @@ public class CustomerServiceTest {
             CustomerEntity toCompare2 = actualCustomers.get(i);
 
             Assertions.assertEquals(toCompare1.getName(),toCompare2.getName());
-            Assertions.assertEquals(toCompare1.getSex(),toCompare2.getSex());
+            Assertions.assertEquals(toCompare1.getGender(),toCompare2.getGender());
             Assertions.assertEquals(toCompare1.getAge(),toCompare2.getAge());
             Assertions.assertEquals(toCompare1.getHeight(),toCompare2.getHeight());
             Assertions.assertEquals(toCompare1.getWeight(),toCompare2.getWeight());
@@ -56,7 +56,7 @@ public class CustomerServiceTest {
         Mockito.when(customerRepository.getReferenceById(Mockito.any())).thenReturn(sampleCustomer);
         Optional<CustomerEntity> actualCustomer = customerService.getById(1L);
         Assertions.assertEquals(sampleCustomer.getName(), actualCustomer.get().getName());
-        Assertions.assertEquals(sampleCustomer.getSex(), actualCustomer.get().getSex());
+        Assertions.assertEquals(sampleCustomer.getGender(), actualCustomer.get().getGender());
         Assertions.assertEquals(sampleCustomer.getAge(), actualCustomer.get().getAge());
         Assertions.assertEquals(sampleCustomer.getHeight(), actualCustomer.get().getHeight());
         Assertions.assertEquals(sampleCustomer.getWeight(), actualCustomer.get().getWeight());
@@ -71,14 +71,14 @@ public class CustomerServiceTest {
         CustomerEntity customer = new CustomerEntity();
         customer.setId(expectedCustomer.getId());
         customer.setName(expectedCustomer.getName());
-        customer.setSex(expectedCustomer.getSex());
+        customer.setGender(expectedCustomer.getGender());
         customer.setAge(expectedCustomer.getAge());
         customer.setWeight(expectedCustomer.getWeight());
         customer.setHeight(expectedCustomer.getHeight());
         customerRepository.save(customer);
         verify(customerRepository,times(1)).save(expectedCustomer);
         Assertions.assertEquals(expectedCustomer.getName(),customer.getName());
-        Assertions.assertEquals(expectedCustomer.getSex(),customer.getSex());
+        Assertions.assertEquals(expectedCustomer.getGender(),customer.getGender());
         Assertions.assertEquals(expectedCustomer.getAge(),customer.getAge());
         Assertions.assertEquals(expectedCustomer.getHeight(),customer.getHeight());
         Assertions.assertEquals(expectedCustomer.getWeight(),customer.getWeight());
@@ -96,10 +96,10 @@ public class CustomerServiceTest {
     }
     public List<CustomerEntity> sampleCustomerList(){
         List<CustomerEntity> sampleCustomers = new ArrayList<>();
-        CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0,LocalDate.now());
-        CustomerEntity customer2 = new CustomerEntity(2L,"marie","female",25,155.0,88.0,LocalDate.now());
-        CustomerEntity customer3 = new CustomerEntity(3L,"steve","male",42,175.0,142.0,LocalDate.now());
-        CustomerEntity customer4 = new CustomerEntity(4L,"eve","female",19,165.0,91.0,LocalDate.now());
+        CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0,LocalDate.now(),null,null);
+        CustomerEntity customer2 = new CustomerEntity(2L,"marie","female",25,155.0,88.0,LocalDate.now(),null,null);
+        CustomerEntity customer3 = new CustomerEntity(3L,"steve","male",42,175.0,142.0,LocalDate.now(),null,null);
+        CustomerEntity customer4 = new CustomerEntity(4L,"eve","female",19,165.0,91.0,LocalDate.now(),null,null);
         sampleCustomers.add(customer1);
         sampleCustomers.add(customer2);
         sampleCustomers.add(customer3);

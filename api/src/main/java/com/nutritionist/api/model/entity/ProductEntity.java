@@ -4,6 +4,8 @@ import lombok.*;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -22,5 +24,8 @@ public class ProductEntity {
     private String productDetails;
     @Column(name = "product_price")
     private Double productPrice;
+    @ManyToMany
+    @JoinColumn()
+    private List<CustomerEntity> customers;
 
 }

@@ -12,8 +12,8 @@ import org.mapstruct.Mappings;
 public interface ProductMapper {
 
     @Mappings({
-            @Mapping(source = "productNameDto",target = "productName"),
-            @Mapping(source = "productDetailsDto",target = "productDetails"),
-            @Mapping(source = "productPriceDto",target = "productPrice")})
+            @Mapping(source = "productName",target = "productName"),
+            @Mapping(source = "productDetails",target = "productDetails"),
+            @Mapping(source = "productPrice",target = "productPrice")})
     ProductEntity toProductEntity(ProductDto productDto);
 }
