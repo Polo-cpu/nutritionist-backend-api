@@ -9,6 +9,7 @@ import com.nutritionist.api.model.mapper.NutritionistMapper;
 import com.nutritionist.api.repository.NutritionistRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@ComponentScan("com.nutritionist.api.service.NutritionistService.class")
 @Slf4j
 @AllArgsConstructor
 public class NutritionistService {

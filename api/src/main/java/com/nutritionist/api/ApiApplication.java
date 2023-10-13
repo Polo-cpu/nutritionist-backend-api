@@ -9,7 +9,8 @@ import org.springframework.session.config.annotation.web.http.EnableSpringHttpSe
 
 @SpringBootApplication
 @EnableSpringHttpSession
-@ComponentScan(basePackages = { "com.*" })
+@EnableJpaRepositories
+@ComponentScan(basePackages = {"com.*"})
 @EntityScan("com.*")
 public class ApiApplication {
 

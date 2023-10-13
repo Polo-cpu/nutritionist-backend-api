@@ -45,46 +45,51 @@ public class CustomerServiceTest {
             Assertions.assertEquals(toCompare1.getHeight(),toCompare2.getHeight());
             Assertions.assertEquals(toCompare1.getWeight(),toCompare2.getWeight());
             Assertions.assertEquals(toCompare1.getStartOperation(),toCompare2.getStartOperation());
-
+            Assertions.assertEquals(toCompare1.getNutritionist(),toCompare2.getNutritionist());
+            Assertions.assertEquals(toCompare1.getProducts(),toCompare2.getProducts());
         }
-
-
     }
+
     @Test
     void getById(){
         CustomerEntity sampleCustomer = sampleCustomerList().get(1);
         Mockito.when(customerRepository.getReferenceById(Mockito.any())).thenReturn(sampleCustomer);
         Optional<CustomerEntity> actualCustomer = customerService.getById(1L);
+
         Assertions.assertEquals(sampleCustomer.getName(), actualCustomer.get().getName());
         Assertions.assertEquals(sampleCustomer.getGender(), actualCustomer.get().getGender());
         Assertions.assertEquals(sampleCustomer.getAge(), actualCustomer.get().getAge());
         Assertions.assertEquals(sampleCustomer.getHeight(), actualCustomer.get().getHeight());
         Assertions.assertEquals(sampleCustomer.getWeight(), actualCustomer.get().getWeight());
-        Assertions.assertEquals(sampleCustomer.getStartOperation(),actualCustomer.get().getStartOperation());
-
+        Assertions.assertEquals(sampleCustomer.getStartOperation(), actualCustomer.get().getStartOperation());
+        Assertions.assertEquals(sampleCustomer.getNutritionist(), actualCustomer.get().getNutritionist());
+        Assertions.assertEquals(sampleCustomer.getProducts(), actualCustomer.get().getProducts());
     }
+
     @Test
     void addCustomer(){
         CustomerEntity expectedCustomer = sampleCustomerList().get(0);
         expectedCustomer.setId(null);
         Mockito.when(customerRepository.save(Mockito.any())).thenReturn(expectedCustomer);
-        CustomerEntity customer = new CustomerEntity();
-        customer.setId(expectedCustomer.getId());
-        customer.setName(expectedCustomer.getName());
-        customer.setGender(expectedCustomer.getGender());
-        customer.setAge(expectedCustomer.getAge());
-        customer.setWeight(expectedCustomer.getWeight());
-        customer.setHeight(expectedCustomer.getHeight());
-        customerRepository.save(customer);
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setName(expectedCustomer.getName());
+        customerDto.setGender(expectedCustomer.getGender());
+        customerDto.setAge(expectedCustomer.getAge());
+        customerDto.setWeight(expectedCustomer.getWeight());
+        customerDto.setHeight(expectedCustomer.getHeight());
+        customerService.create(customerDto);
         verify(customerRepository,times(1)).save(expectedCustomer);
-        Assertions.assertEquals(expectedCustomer.getName(),customer.getName());
-        Assertions.assertEquals(expectedCustomer.getGender(),customer.getGender());
-        Assertions.assertEquals(expectedCustomer.getAge(),customer.getAge());
-        Assertions.assertEquals(expectedCustomer.getHeight(),customer.getHeight());
-        Assertions.assertEquals(expectedCustomer.getWeight(),customer.getWeight());
-        Assertions.assertEquals(expectedCustomer.getStartOperation(),customer.getStartOperation());
 
+        Assertions.assertEquals(expectedCustomer.getName(),customerDto.getName());
+        Assertions.assertEquals(expectedCustomer.getGender(),customerDto.getGender());
+        Assertions.assertEquals(expectedCustomer.getAge(),customerDto.getAge());
+        Assertions.assertEquals(expectedCustomer.getHeight(),customerDto.getHeight());
+        Assertions.assertEquals(expectedCustomer.getWeight(),customerDto.getWeight());
+        Assertions.assertEquals(expectedCustomer.getStartOperation(),customerDto.getStartOperation());
+        Assertions.assertEquals(expectedCustomer.getNutritionist(), customerDto.getNutritionist());
+        Assertions.assertEquals(expectedCustomer.getProducts(), customerDto.getProducts());
     }
+
     @Test
     void delete(){
         Long customerId = 1L;

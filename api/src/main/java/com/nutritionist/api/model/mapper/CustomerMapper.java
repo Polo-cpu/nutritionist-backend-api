@@ -14,7 +14,9 @@ public interface CustomerMapper {
             @Mapping(source = "age", target = "age"),
             @Mapping(source = "height", target = "height"),
             @Mapping(source = "weight", target = "weight"),
-            @Mapping(source = "startOperation",target = "startOperation")})
+            @Mapping(source = "startOperation",target = "startOperation"),
+            @Mapping(source = "nutritionist",target = "nutritionist"),
+            @Mapping(source = "products",target = "products")})
     CustomerEntity toCustomerEntity(CustomerDto customerDto);
 
 

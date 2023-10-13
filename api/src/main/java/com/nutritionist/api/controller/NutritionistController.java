@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/nutritionist")
 public class NutritionistController {
     @Autowired
     private NutritionistService nutritionistService;

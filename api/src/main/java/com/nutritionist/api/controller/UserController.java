@@ -7,6 +7,7 @@ import com.nutritionist.api.model.entity.UserEntity;
 import com.nutritionist.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
     @Autowired
-    private UserService userService;
+    private final UserService userService;
+
     @GetMapping("/all")
     public ResponseEntity<List<UserEntity>> findAll(){
         List<UserEntity> users = userService.findAll();

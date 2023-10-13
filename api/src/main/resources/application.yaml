@@ -1,0 +1,7 @@
+security:
+  jwt:
+    secret: "Gw8ykqiUXCwjtaArLArM8uSXl08QukQAk4daUvsdTlouwthkADDkS5v3HhnLIWt"
+
+spring:
+  main:
+    allow-circular-references: true

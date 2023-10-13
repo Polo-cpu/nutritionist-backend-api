@@ -121,7 +121,7 @@ public class CustomerControllerTest {
     void addCustomer() throws Exception{
         CustomerEntity customer = sampleCustomerList().get(1);
 
-        CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00,LocalDate.now());
+        CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00,LocalDate.now(),null,null);
         Mockito.when(customerService.create(customerDto)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/add"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)

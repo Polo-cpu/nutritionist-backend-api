@@ -1,44 +1,73 @@
 package com.nutritionist.api.model.entity;
 
-import jakarta.validation.constraints.Size;
+
+import com.nutritionist.api.model.enums.Role;
 import lombok.*;
+
+
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-@Data
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
 @Table(name = "users")
-public class UserEntity{
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(unique = true, nullable = false, name = "user_name")
-    private String userName;
+    private String username;
     @Column(nullable = false, name = "email")
     private String email;
-
     @Column(unique = true, nullable = false, name = "password")
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @ManyToMany
-    @JoinTable(name = "user_role",
-    joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "user_id")},
-    inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")})
-    private Set<Role> roles;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
