@@ -33,18 +33,5 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    public void configure(HttpSecurity http) throws Exception{
-        http.httpBasic();
-        http
-                .authorizeHttpRequests()
-                .antMatchers("/customer/{id}").hasAnyRole("ADMIN","USER")
-                .antMatchers("/customer/all").hasRole("ADMIN")
-                .antMatchers("/customer/create").hasAnyRole("USER","ADMIN")
-                .antMatchers("/customer/delete").hasRole("ADMIN")
-                .antMatchers("/product").hasRole("ADMIN")
-                .and()
-                .authorizeHttpRequests()
-                .anyRequest()
-                .permitAll();
-    }
+
 }
