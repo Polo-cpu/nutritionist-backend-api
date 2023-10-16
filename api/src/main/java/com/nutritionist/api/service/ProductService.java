@@ -2,9 +2,13 @@ package com.nutritionist.api.service;
 
 import com.nutritionist.api.exception.CustomerNotFoundException;
 import com.nutritionist.api.exception.ProductException;
+import com.nutritionist.api.exception.ProductNotFoundException;
+import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.ProductDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
+import com.nutritionist.api.model.enums.Language;
+import com.nutritionist.api.model.enums.MessageCodes;
 import com.nutritionist.api.model.mapper.ProductMapper;
 import com.nutritionist.api.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -28,41 +32,51 @@ public class ProductService {
     private ProductMapper productMapper;
 
 
-    public List<ProductEntity> getAll(){
-        log.info("all products are showing");
-        return productRepository.findAll();
-    }
-    public Page<ProductEntity> getProductsWithPagination(int no, int size){
-        log.info("all customers are showing as page");
-        return productRepository.findAll(PageRequest.of(no,size));
+    public List<ProductEntity> getAll(Language language){
+        try {
+            log.info("all products are showing");
+            return productRepository.findAll();
+        }catch (Exception e){
+            throw new ProductNotFoundException(language, MessageCodes.PRODUCT_NOT_FOUND);
+        }
     }
 
-    public Optional<ProductEntity> getById(Long id){
+    public Page<ProductEntity> getProductsWithPagination(Language language, int page, int size){
+        try {
+            log.info("all products are showing as page");
+            return productRepository.findAll(PageRequest.of(page, size));
+        }catch (Exception e){
+            throw new ProductNotFoundException(language,MessageCodes.PRODUCT_NOT_FOUND);
+        }
+    }
+
+    public Optional<ProductEntity> getById(Language language, Long id){
         Optional<ProductEntity> byId = productRepository.findById(id);
         if(byId.isEmpty()){
-            log.error("Product not found!");
-            throw new ProductException("Product","Not Found");
+            throw new ProductNotFoundException(language, MessageCodes.PRODUCT_NOT_FOUND);
         }
-        else {
+        else{
+            log.info("product has found!");
             return byId;
         }
     }
 
-    public ProductEntity addProduct(ProductDto productDto){
-        log.info("a customer is adding");
-        ProductEntity productDto2product = productMapper.toProductEntity(productDto);
-        return productRepository.save(productDto2product);
+    public ProductEntity create(Language language, ProductDto productDto){
+        try {
+            log.info("product added successfully!");
+            return productRepository.save(productMapper.toProductEntity(productDto));
+        }catch (Exception e){
+            throw  new ProductNotFoundException(language,MessageCodes.PRODUCT_NOT_CREATED);
+        }
     }
 
-    public ProductEntity deleteById(Long id){
+    public ProductEntity deleteById(Language language, Long id){
         Optional<ProductEntity> byId = productRepository.findById(id);
-
         if(byId.isEmpty()){
-            log.error("Customer not found!");
-            throw new CustomerNotFoundException("Customer","Not Found");
+            throw new ProductNotFoundException(language,MessageCodes.CUSTOMER_NOT_DELETED);
         }
         else{
-            log.error("Customer deleted successfully!");
+            log.error("Product deleted successfully!");
             productRepository.delete(byId.get());
         }
 

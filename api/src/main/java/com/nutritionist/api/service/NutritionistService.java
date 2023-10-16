@@ -5,6 +5,8 @@ import com.nutritionist.api.exception.NutritionistNotFoundException;
 import com.nutritionist.api.model.dto.NutritionistDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.NutritionistEntity;
+import com.nutritionist.api.model.enums.Language;
+import com.nutritionist.api.model.enums.MessageCodes;
 import com.nutritionist.api.model.mapper.NutritionistMapper;
 import com.nutritionist.api.repository.NutritionistRepository;
 import lombok.AllArgsConstructor;
@@ -24,39 +26,53 @@ import java.util.Optional;
 public class NutritionistService {
     private NutritionistRepository nutritionistRepository;
     private NutritionistMapper nutritionistMapper;
-
-    public NutritionistEntity create(NutritionistDto nutritionistDto){
-        log.info("Nutritionist has been created!");
-        return nutritionistMapper.toNutritionistEntity(nutritionistDto);
+    public List<NutritionistEntity> getAll(Language language) {
+        try {
+            log.info("all nutritionists are showing");
+            return nutritionistRepository.findAll();
+        } catch (Exception e) {
+            throw new NutritionistNotFoundException(language, MessageCodes.NUTRITIONIST_NOT_FOUND);
+        }
     }
-    public boolean isNutritionistAvailable(Long id){
-        Optional<NutritionistEntity> nutritionist = nutritionistRepository.findById(id);
-        return nutritionist.get().getIsAvailable();
+    public Page<NutritionistEntity> getNutritionistWithPagination (Language language,int page, int size){
+        try {
+            log.info("all nutritionists are showing as page");
+            return nutritionistRepository.findAll(PageRequest.of(page, size));
+        } catch (Exception e) {
+            throw new NutritionistNotFoundException(language, MessageCodes.NUTRITIONIST_NOT_FOUND);
+        }
     }
-    public List<NutritionistEntity> getAll(){
-        return nutritionistRepository.findAll();
-    }
-    public Optional<NutritionistEntity> getById(Long id){
+    public Optional<NutritionistEntity> getById(Language language, Long id){
         Optional<NutritionistEntity> byId = nutritionistRepository.findById(id);
         if(byId.isEmpty()){
-            log.error("Nutritionist not found!");
-            throw new CustomerNotFoundException("Nutritionist","Not Found");
+            throw new NutritionistNotFoundException(language, MessageCodes.NUTRITIONIST_NOT_FOUND);
         }
         else{
-            log.error("Nutritionist has found successfully!");
+            log.info("Nutritionist has found!");
             return byId;
         }
     }
-    public Page<NutritionistEntity> getNutritionistWithPagination(int page, int size){
-        log.info("all nutritionists are showing as page");
-        return nutritionistRepository.findAll(PageRequest.of(page, size));
+    public NutritionistEntity create (Language language, NutritionistDto nutritionistDto){
+        try {
+            log.info("Nutritionist added successfully!");
+            return nutritionistRepository.save(nutritionistMapper.toNutritionistEntity(nutritionistDto));
+        }catch (Exception e){
+            throw  new NutritionistNotFoundException(language,MessageCodes.NUTRITIONIST_NOT_CREATED);
+        }
     }
-    public NutritionistEntity deleteById(Long id){
-        Optional<NutritionistEntity> byId = nutritionistRepository.findById(id);
+    public boolean isNutritionistAvailable (Language language, Long id){
+        try {
+            Optional<NutritionistEntity> nutritionist = nutritionistRepository.findById(id);
+            return nutritionist.get().getIsAvailable();
+        }catch (Exception e){
+            throw new NutritionistNotFoundException(language,MessageCodes.NUTRITIONIST_NOT_AVAILABLE);
+        }
+    }
 
+    public NutritionistEntity deleteById(Language language, Long id){
+        Optional<NutritionistEntity> byId = nutritionistRepository.findById(id);
         if(byId.isEmpty()){
-            log.error("Nutritionist not found!");
-            throw new NutritionistNotFoundException("Nutritionist","Not Found");
+            throw new NutritionistNotFoundException(language,MessageCodes.NUTRITIONIST_NOT_DELETED);
         }
         else{
             log.error("Nutritionist deleted successfully!");

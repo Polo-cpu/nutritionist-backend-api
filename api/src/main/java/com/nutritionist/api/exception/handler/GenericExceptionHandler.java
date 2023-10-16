@@ -2,46 +2,65 @@ package com.nutritionist.api.exception.handler;
 
 import com.nutritionist.api.exception.CustomerNotFoundException;
 import com.nutritionist.api.exception.NutritionistNotFoundException;
-import com.nutritionist.api.exception.ProductException;
+import com.nutritionist.api.exception.ProductNotFoundException;
 import com.nutritionist.api.exception.UserNotFoundException;
-import com.nutritionist.api.model.entity.UserEntity;
+import com.nutritionist.api.model.enums.MessageCodes;
+import com.nutritionist.api.response.InternalApiResponse;
+import com.nutritionist.api.response.MessageResponse;
+import com.nutritionist.api.utils.MessageUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import java.util.Collections;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@ControllerAdvice
+@RestControllerAdvice
 public class GenericExceptionHandler {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handleUserNotFoundException(UserNotFoundException exception){
-        Map<String,String> errorMap = new HashMap<>();
-        errorMap.put("error_message",exception.getMessage());
-        errorMap.put("error_cause",exception.getCause().toString());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMap);
+    public InternalApiResponse<String> handleUserNotFoundException(UserNotFoundException userNotFoundException){
+        return  InternalApiResponse.<String>builder()
+                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(userNotFoundException.getLanguage(), MessageCodes.ERROR))
+                        .description(MessageUtils.getMessage(userNotFoundException.getLanguage(),userNotFoundException.getMessageCodes()))
+                        .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(userNotFoundException.getMessage()))
+                .build();
     }
-    @ExceptionHandler(ProductException.class)
-    public ResponseEntity<Map<String,String>> handleProductException(ProductException exception){
-        Map<String,String> errorMap = new HashMap<>();
-        errorMap.put("error_message",exception.getMessage());
-        errorMap.put("error_cause",exception.getCause().toString());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProductNotFoundException.class)
+    public InternalApiResponse<String> handleProductNotFoundException(ProductNotFoundException productNotFoundException){
+        return  InternalApiResponse.<String>builder()
+                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(productNotFoundException.getLanguage(), MessageCodes.ERROR))
+                        .description(MessageUtils.getMessage(productNotFoundException.getLanguage(),productNotFoundException.getMessageCodes()))
+                        .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(productNotFoundException.getMessage()))
+                .build();
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handleCustomerNotFoundException(CustomerNotFoundException exception){
-        Map<String,String> errorMap = new HashMap<>();
-        errorMap.put("error_message",exception.getMessage());
-        errorMap.put("error_cause",exception.getCause().toString());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMap);
+    public InternalApiResponse<String> handleCustomerNotFoundException(CustomerNotFoundException customerNotFoundException){
+        return  InternalApiResponse.<String>builder()
+                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(customerNotFoundException.getLanguage(), MessageCodes.ERROR))
+                        .description(MessageUtils.getMessage(customerNotFoundException.getLanguage(),customerNotFoundException.getMessageCodes()))
+                .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(customerNotFoundException.getMessage()))
+                .build();
     }
     @ExceptionHandler(NutritionistNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handleNutritionistNotFoundException(NutritionistNotFoundException exception){
-        Map<String,String> errorMap = new HashMap<>();
-        errorMap.put("error_message",exception.getMessage());
-        errorMap.put("error_cause",exception.getCause().toString());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMap);
+    public InternalApiResponse<String> handleNutritionistNotFoundException(NutritionistNotFoundException nutritionistNotFoundException){
+        return  InternalApiResponse.<String>builder()
+                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(nutritionistNotFoundException.getLanguage(), MessageCodes.ERROR))
+                        .description(MessageUtils.getMessage(nutritionistNotFoundException.getLanguage(),nutritionistNotFoundException.getMessageCodes()))
+                        .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(nutritionistNotFoundException.getMessage()))
+                .build();
     }
-
 }
