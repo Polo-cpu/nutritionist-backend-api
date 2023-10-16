@@ -1,17 +1,11 @@
 package com.nutritionist.api.controller;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nutritionist.api.exception.handler.GenericExceptionHandler;
-import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.NutritionistDto;
-import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.NutritionistEntity;
 import com.nutritionist.api.model.enums.Language;
-import com.nutritionist.api.model.mapper.CustomerMapper;
-import com.nutritionist.api.model.mapper.CustomerMapperImpl;
 import com.nutritionist.api.model.mapper.NutritionistMapper;
 import com.nutritionist.api.model.mapper.NutritionistMapperImpl;
-import com.nutritionist.api.service.CustomerService;
 import com.nutritionist.api.service.NutritionistService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,19 +26,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(NutritionistController.class)
-@EnableAutoConfiguration
-
 public class NutritionistControllerTest {
     private NutritionistMapper nutritionistMapper = new NutritionistMapperImpl();
     @Autowired

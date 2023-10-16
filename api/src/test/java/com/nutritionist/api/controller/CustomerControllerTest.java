@@ -48,7 +48,6 @@ import java.util.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CustomerController.class)
-@EnableAutoConfiguration
 public class CustomerControllerTest {
     private CustomerMapper customerMapper = new CustomerMapperImpl();
     @Autowired
