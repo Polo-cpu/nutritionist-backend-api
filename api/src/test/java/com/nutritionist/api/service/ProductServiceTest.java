@@ -4,6 +4,7 @@ import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.ProductDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
+import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.ProductMapper;
 import com.nutritionist.api.repository.CustomerRepository;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
+    @Autowired
+    private final Language language = Language.EN;
     @Mock
     private ProductRepository productRepository;
     @Mock
@@ -34,7 +38,7 @@ public class ProductServiceTest {
     @Test
     void getAllCustomers(){
         List<ProductEntity> sampleProducts = sampleProductList();
-        Mockito.when(productRepository.findAll()).thenReturn(sampleProducts);
+        Mockito.when(productService.getAll(language)).thenReturn(sampleProducts);
         List<ProductEntity> actualProducts = productRepository.findAll();
         Assertions.assertEquals(actualProducts.size(), sampleProducts.size());
         for(int i = 0;i<actualProducts.size();i++){
@@ -51,12 +55,11 @@ public class ProductServiceTest {
     @Test
     void getById(){
         ProductEntity sampleProduct = sampleProductList().get(1);
-        Mockito.when(productRepository.getReferenceById(Mockito.any())).thenReturn(sampleProduct);
-        Optional<ProductEntity> realProduct = productService.getById(1L);
+        Mockito.when(productService.getById(language,Mockito.any())).thenReturn(Optional.ofNullable(sampleProduct));
+        Optional<ProductEntity> realProduct = productService.getById(language,1L);
         Assertions.assertEquals(sampleProduct.getProductName(), realProduct.get().getProductName());
         Assertions.assertEquals(sampleProduct.getProductDetails(), realProduct.get().getProductDetails());
         Assertions.assertEquals(sampleProduct.getProductPrice(), realProduct.get().getProductPrice());
-
     }
     @Test
     void addProduct(){
@@ -80,7 +83,7 @@ public class ProductServiceTest {
         ProductEntity product = sampleProductList().get(0);
         Mockito.when(productRepository.getReferenceById(productId)).thenReturn(product);
         doNothing().when(productRepository).deleteById(productId);
-        productService.deleteById(1L);
+        productService.deleteById(language, 1L);
         verify(productRepository,times(1)).deleteById(productId);
     }
     public List<ProductEntity> sampleProductList(){

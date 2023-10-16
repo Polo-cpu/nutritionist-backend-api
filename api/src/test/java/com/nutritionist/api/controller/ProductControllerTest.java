@@ -6,6 +6,7 @@ import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.ProductDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
+import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.ProductMapper;
 import com.nutritionist.api.model.mapper.ProductMapperImpl;
@@ -40,6 +41,8 @@ public class ProductControllerTest {
     private ProductMapper productMapper = new ProductMapperImpl();
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private final Language language = Language.EN;
     @MockBean
     private ProductService productService;
     @InjectMocks
@@ -56,7 +59,7 @@ public class ProductControllerTest {
     @Test
     void getAllProducts() throws Exception {
         List<ProductEntity> sampleProducts = sampleProductList();
-        when(productService.getAll()).thenReturn(sampleProducts);
+        when(productService.getAll(language)).thenReturn(sampleProducts);
         MockHttpServletResponse response = mockMvc.perform(get("/product/all"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -69,7 +72,7 @@ public class ProductControllerTest {
     @Test
     void getProductsWithPagination() throws Exception{
         Page<ProductEntity> productEntityPage = (Page<ProductEntity>) sampleProductList();
-        when(productService.getProductsWithPagination(5,5)).thenReturn(productEntityPage);
+        when(productService.getProductsWithPagination(language,5,5)).thenReturn(productEntityPage);
         MockHttpServletResponse response = mockMvc.perform(get("/product/5/5"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -81,7 +84,7 @@ public class ProductControllerTest {
     @Test
     void getProductById() throws Exception{
         List<ProductEntity> sampleProductList = sampleProductList();
-        when(productService.getById(1L)).thenReturn(Optional.ofNullable(sampleProductList.get(0)));
+        when(productService.getById(language,1L)).thenReturn(Optional.ofNullable(sampleProductList.get(0)));
         MockHttpServletResponse response = mockMvc.perform(get("/product/1L"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -96,7 +99,7 @@ public class ProductControllerTest {
 
         ProductEntity product = sampleProductList().get(0);
 
-        Mockito.when(productService.deleteById(1L)).thenReturn(product);
+        Mockito.when(productService.deleteById(language,1L)).thenReturn(product);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/1L"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -110,7 +113,7 @@ public class ProductControllerTest {
         ProductEntity product = sampleProductList().get(1);
 
         ProductDto productDto = new ProductDto("abc","medicine",10.0);
-        Mockito.when(productService.addProduct(productDto)).thenReturn(product);
+        Mockito.when(productService.create(language,productDto)).thenReturn(product);
         MockHttpServletResponse response = mockMvc.perform(get("/product/add"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())

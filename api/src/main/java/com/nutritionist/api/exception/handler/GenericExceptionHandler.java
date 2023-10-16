@@ -1,9 +1,6 @@
 package com.nutritionist.api.exception.handler;
 
-import com.nutritionist.api.exception.CustomerNotFoundException;
-import com.nutritionist.api.exception.NutritionistNotFoundException;
-import com.nutritionist.api.exception.ProductNotFoundException;
-import com.nutritionist.api.exception.UserNotFoundException;
+import com.nutritionist.api.exception.*;
 import com.nutritionist.api.model.enums.MessageCodes;
 import com.nutritionist.api.response.InternalApiResponse;
 import com.nutritionist.api.response.MessageResponse;
@@ -61,6 +58,17 @@ public class GenericExceptionHandler {
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .hasError(true)
                 .errorMessages(Collections.singletonList(nutritionistNotFoundException.getMessage()))
+                .build();
+    }
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public InternalApiResponse<String> handleIncorrectPasswordException(IncorrectPasswordException incorrectPasswordException){
+        return  InternalApiResponse.<String>builder()
+                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(incorrectPasswordException.getLanguage(), MessageCodes.ERROR))
+                        .description(MessageUtils.getMessage(incorrectPasswordException.getLanguage(),incorrectPasswordException.getMessageCodes()))
+                        .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .hasError(true)
+                .errorMessages(Collections.singletonList(incorrectPasswordException.getMessage()))
                 .build();
     }
 }

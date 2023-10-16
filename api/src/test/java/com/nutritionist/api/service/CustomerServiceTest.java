@@ -2,6 +2,7 @@ package com.nutritionist.api.service;
 
 import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
+import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.repository.CustomerRepository;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTest {
+    @Autowired
+    private final Language language = Language.EN;
     @Mock
     private CustomerMapper customerMapper;
     @Mock
@@ -54,7 +58,7 @@ public class CustomerServiceTest {
     void getById(){
         CustomerEntity sampleCustomer = sampleCustomerList().get(1);
         Mockito.when(customerRepository.getReferenceById(Mockito.any())).thenReturn(sampleCustomer);
-        Optional<CustomerEntity> actualCustomer = customerService.getById(1L);
+        Optional<CustomerEntity> actualCustomer = customerService.getById(language,1L);
 
         Assertions.assertEquals(sampleCustomer.getName(), actualCustomer.get().getName());
         Assertions.assertEquals(sampleCustomer.getGender(), actualCustomer.get().getGender());
@@ -65,7 +69,6 @@ public class CustomerServiceTest {
         Assertions.assertEquals(sampleCustomer.getNutritionist(), actualCustomer.get().getNutritionist());
         Assertions.assertEquals(sampleCustomer.getProducts(), actualCustomer.get().getProducts());
     }
-
     @Test
     void addCustomer(){
         CustomerEntity expectedCustomer = sampleCustomerList().get(0);
@@ -77,7 +80,7 @@ public class CustomerServiceTest {
         customerDto.setAge(expectedCustomer.getAge());
         customerDto.setWeight(expectedCustomer.getWeight());
         customerDto.setHeight(expectedCustomer.getHeight());
-        customerService.create(customerDto);
+        customerService.create(language,customerDto);
         verify(customerRepository,times(1)).save(expectedCustomer);
 
         Assertions.assertEquals(expectedCustomer.getName(),customerDto.getName());
@@ -89,14 +92,13 @@ public class CustomerServiceTest {
         Assertions.assertEquals(expectedCustomer.getNutritionist(), customerDto.getNutritionist());
         Assertions.assertEquals(expectedCustomer.getProducts(), customerDto.getProducts());
     }
-
     @Test
     void delete(){
         Long customerId = 1L;
         CustomerEntity customer = sampleCustomerList().get(0);
         Mockito.when(customerRepository.getReferenceById(customerId)).thenReturn(customer);
         doNothing().when(customerRepository).deleteById(customerId);
-        customerService.deleteById(1L);
+        customerService.deleteById(language,1L);
         verify(customerRepository,times(1)).deleteById(customerId);
     }
     public List<CustomerEntity> sampleCustomerList(){
@@ -111,5 +113,4 @@ public class CustomerServiceTest {
         sampleCustomers.add(customer4);
         return sampleCustomers;
     }
-
 }

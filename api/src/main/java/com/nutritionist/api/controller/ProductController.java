@@ -3,6 +3,7 @@ package com.nutritionist.api.controller;
 import com.nutritionist.api.model.dto.ProductDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
+import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,49 +20,41 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+    private final Language language = Language.EN;
     private ProductService productService;
     @Autowired
     public ProductController(ProductService productService){
         this.productService = productService;
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<ProductEntity>> gelAllProducts(){
-        List<ProductEntity> products = productService.getAll();
-
+        List<ProductEntity> products = productService.getAll(language);
         return new ResponseEntity<List<ProductEntity>>(products, HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{no}/{size}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Page<ProductEntity>> getProductsWithPagination(@PathVariable int no,
                                                                            @PathVariable int size){
-        Page<ProductEntity> productsWithPagination = productService.getProductsWithPagination(no,size);
-
+        Page<ProductEntity> productsWithPagination = productService.getProductsWithPagination(language, no,size);
         return new ResponseEntity<Page<ProductEntity>>(productsWithPagination, HttpStatus.OK);
     }
-
-    @GetMapping("/get/{id}")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/find/{id}")
     public ResponseEntity<Optional<ProductEntity>> findById(@PathVariable("id") Long id){
-        Optional<ProductEntity> byId = productService.getById(id);
-
+        Optional<ProductEntity> byId = productService.getById(language, id);
         return new ResponseEntity<Optional<ProductEntity>>(byId,HttpStatus.OK);
     }
-    @PostMapping("/add")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
     public ResponseEntity<ProductEntity> addProduct(@RequestBody ProductDto productDto){
-        ProductEntity add = productService.addProduct(productDto);
-
+        ProductEntity add = productService.create(language, productDto);
         return new ResponseEntity<ProductEntity>(add,HttpStatus.CREATED);
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ProductEntity> deleteProductById(@PathVariable("id") Long id){
-        ProductEntity deletedProduct = productService.deleteById(id);
+        ProductEntity deletedProduct = productService.deleteById(language, id);
         return new ResponseEntity<ProductEntity>(deletedProduct,HttpStatus.ACCEPTED);
     }
-
-
-
 }

@@ -2,12 +2,9 @@ package com.nutritionist.api.exception;
 
 import com.nutritionist.api.model.enums.IMessageCodes;
 import com.nutritionist.api.model.enums.Language;
-import com.nutritionist.api.model.enums.MessageCodes;
 import com.nutritionist.api.utils.MessageUtils;
-import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Getter
 public class CustomerNotFoundException extends RuntimeException{
@@ -19,5 +16,4 @@ public class CustomerNotFoundException extends RuntimeException{
         this.messageCodes = messageCodes;
         log.error("[CustomerNotCreatedException] -> message: {} developer message: {}",MessageUtils.getMessage(language,messageCodes),messageCodes);
     }
-
 }

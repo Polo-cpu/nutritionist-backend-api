@@ -13,6 +13,7 @@ public interface NutritionistMapper {
     @Mappings({
             @Mapping(source = "nutritionistName", target = "nutritionistName"),
             @Mapping(source = "profession", target = "profession"),
-            @Mapping(source = "isAvailable", target = "isAvailable")})
+            @Mapping(source = "isAvailable", target = "isAvailable"),
+            @Mapping(source = "customers", target = "customers")})
     NutritionistEntity toNutritionistEntity(NutritionistDto nutritionistDto);
 }

@@ -1,11 +1,7 @@
 package com.nutritionist.api.service;
 
-import com.nutritionist.api.exception.CustomerNotFoundException;
-import com.nutritionist.api.exception.ProductException;
 import com.nutritionist.api.exception.ProductNotFoundException;
-import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.ProductDto;
-import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.enums.MessageCodes;
@@ -13,11 +9,9 @@ import com.nutritionist.api.model.mapper.ProductMapper;
 import com.nutritionist.api.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +34,6 @@ public class ProductService {
             throw new ProductNotFoundException(language, MessageCodes.PRODUCT_NOT_FOUND);
         }
     }
-
     public Page<ProductEntity> getProductsWithPagination(Language language, int page, int size){
         try {
             log.info("all products are showing as page");
@@ -79,9 +72,6 @@ public class ProductService {
             log.error("Product deleted successfully!");
             productRepository.delete(byId.get());
         }
-
         return byId.get();
     }
-
-
 }

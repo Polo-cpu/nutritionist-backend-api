@@ -1,39 +1,66 @@
 package com.nutritionist.api.config;
-import com.nutritionist.api.security.JwtAuthenticationFilter;
+import com.nutritionist.api.security.UserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-import javax.servlet.Filter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
-    private final AuthenticationProvider authenticationProvider;
-    private final JwtAuthenticationFilter authenticationFilter;
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .antMatchers("/nutritionist/**","/user/**","/customer/add","/customer/delete","/product/add","/product/delete")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore((Filter) authenticationFilter, Filter.class);
-        return httpSecurity.build();
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true
+)
+public class SecurityConfig extends WebSecurityConfiguration {
+    @Bean
+    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
+        return new UserDetailsService();
     }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
+        return authenticationProvider;
+    }
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+    }
+    protected void configure(HttpSecurity httpSecurity)throws Exception{
+        httpSecurity.authorizeRequests()
+                .antMatchers("/user/create").permitAll()
+                .antMatchers("/customer/all").permitAll()
+                .antMatchers("/customer/{}").permitAll()
+                .antMatchers("/product/{}/{}").permitAll()
+                .antMatchers("/nutritionist/{}/{}").permitAll()
+                .antMatchers("/product/all").permitAll()
+                .antMatchers("/nutritionist/all").permitAll()
+                .antMatchers("/product/find/{}").permitAll()
+                .antMatchers("/customer/create").hasAnyAuthority("ROLE_USER")
+                .antMatchers("/nutritionist/find/{}").hasAnyAuthority("ROLE_USER")
+                .antMatchers("/customer/delete/{}").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/customer/{}").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/user/delete/{}").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/product/delete/{}").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/product/create").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/nutritionist/create").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/nutritionist/delete/{}").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/api/v1/product/categoryList").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/api/v1/product/showAllProductsByUsername").hasAuthority("ROLE_USER")
+                .and()
+                .formLogin(form -> form.defaultSuccessUrl("/api/v1/dashboard/main")
+                        .loginPage("/login")
+                );
+        httpSecurity.csrf().disable();
+        httpSecurity.headers().frameOptions().disable();
+    }
 }

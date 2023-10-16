@@ -15,7 +15,8 @@ public enum MessageCodes implements IMessageCodes{
     PRODUCT_NOT_DELETED(3003),
     USER_NOT_CREATED(4001),
     USER_NOT_FOUND(4002),
-    USER_NOT_DELETED(4003);
+    USER_NOT_DELETED(4003),
+    INCORRECT_PASSWORD(4004);
 
     private final int value;
     MessageCodes(int value){

@@ -7,6 +7,7 @@ import com.nutritionist.api.model.entity.CustomerEntity;
 
 import com.nutritionist.api.model.entity.NutritionistEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
+import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.CustomerMapperImpl;
 import com.nutritionist.api.service.CustomerService;
@@ -52,6 +53,8 @@ public class CustomerControllerTest {
     private CustomerMapper customerMapper = new CustomerMapperImpl();
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private final Language language = Language.EN;
     @MockBean
     private CustomerService customerService;
     @InjectMocks
@@ -68,7 +71,7 @@ public class CustomerControllerTest {
     @Test
     void getAllCustomers() throws Exception {
         List<CustomerEntity> sampleCustomers = sampleCustomerList();
-        when(customerService.getAll()).thenReturn(sampleCustomers);
+        when(customerService.getAll(language)).thenReturn(sampleCustomers);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/all"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -81,7 +84,7 @@ public class CustomerControllerTest {
     @Test
     void getCustomersWithPagination() throws Exception{
         Page<CustomerEntity> customerEntityPage = (Page<CustomerEntity>) sampleCustomerList();
-        when(customerService.getCustomersWithPagination(5,5)).thenReturn(customerEntityPage);
+        when(customerService.getCustomersWithPagination(language,5,5)).thenReturn(customerEntityPage);
         MockHttpServletResponse response = mockMvc.perform(get("/5/5"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -93,7 +96,7 @@ public class CustomerControllerTest {
     @Test
     void getCustomerById() throws Exception{
         List<CustomerEntity> sampleCustomersList = sampleCustomerList();
-        when(customerService.getById(1L)).thenReturn(Optional.ofNullable(sampleCustomersList.get(0)));
+        when(customerService.getById(language,1L)).thenReturn(Optional.ofNullable(sampleCustomersList.get(0)));
         MockHttpServletResponse response = mockMvc.perform(get("/customer/all"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -108,21 +111,20 @@ public class CustomerControllerTest {
 
         CustomerEntity customer = sampleCustomerList().get(0);
 
-        Mockito.when(customerService.deleteById(1L)).thenReturn(customer);
+        Mockito.when(customerService.deleteById(language,1L)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/1L"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn()
                 .getResponse();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-
     }
     @Test
     void addCustomer() throws Exception{
         CustomerEntity customer = sampleCustomerList().get(1);
 
         CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00,LocalDate.now(),null,null);
-        Mockito.when(customerService.create(customerDto)).thenReturn(customer);
+        Mockito.when(customerService.create(language, customerDto)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/add"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
                 .andDo(MockMvcResultHandlers.print())
@@ -130,9 +132,6 @@ public class CustomerControllerTest {
                 .getResponse();
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
-
-
-
     public List<CustomerEntity> sampleCustomerList(){
         List<CustomerEntity> sampleCustomers = new ArrayList<>();
         CustomerEntity customer1 = new CustomerEntity(1L,"john","male",35,185.0,120.0,LocalDate.now(),null,null);
@@ -145,6 +144,4 @@ public class CustomerControllerTest {
         sampleCustomers.add(customer4);
         return sampleCustomers;
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.nutritionist.api.service;
 
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.NutritionistEntity;
+import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.NutritionistMapper;
 import com.nutritionist.api.repository.NutritionistRepository;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 public class NutritionistServiceTest {
+    @Autowired
+    private final Language language = Language.EN;
     @Mock
     private NutritionistMapper nutritionistMapper;
     @Mock
@@ -27,7 +31,7 @@ public class NutritionistServiceTest {
     @Test
     void getAllNutritionists(){
         List<NutritionistEntity> sampleNutritionists = sampleNutritionistList();
-        Mockito.when(nutritionistRepository.findAll()).thenReturn(sampleNutritionists);
+        Mockito.when(nutritionistService.getAll(language)).thenReturn(sampleNutritionists);
         List<NutritionistEntity> actualNutritionist = nutritionistRepository.findAll();
         Assertions.assertEquals(actualNutritionist.size(), sampleNutritionists.size());
         for(int i = 0;i<actualNutritionist.size();i++){
@@ -45,7 +49,7 @@ public class NutritionistServiceTest {
     void getById(){
         NutritionistEntity sampleNutritionist = sampleNutritionistList().get(1);
         Mockito.when(nutritionistRepository.getReferenceById(Mockito.any())).thenReturn(sampleNutritionist);
-        Optional<NutritionistEntity> actualNutritionist = nutritionistService.getById(1L);
+        Optional<NutritionistEntity> actualNutritionist = nutritionistService.getById(language,1L);
         Assertions.assertEquals(sampleNutritionist.getNutritionistName(), actualNutritionist.get().getNutritionistName());
         Assertions.assertEquals(sampleNutritionist.getProfession(), actualNutritionist.get().getProfession());
         Assertions.assertEquals(sampleNutritionist.getIsAvailable(), actualNutritionist.get().getIsAvailable());
@@ -77,7 +81,7 @@ public class NutritionistServiceTest {
         NutritionistEntity nutritionist = sampleNutritionistList().get(0);
         Mockito.when(nutritionistRepository.getReferenceById(nutritionistId)).thenReturn(nutritionist);
         doNothing().when(nutritionistRepository).deleteById(nutritionistId);
-        nutritionistService.deleteById(1L);
+        nutritionistService.deleteById(language,1L);
         verify(nutritionistRepository,times(1)).deleteById(nutritionistId);
     }
     public List<NutritionistEntity> sampleNutritionistList(){

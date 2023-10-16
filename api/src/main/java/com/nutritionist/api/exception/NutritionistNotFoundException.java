@@ -17,5 +17,4 @@ public class NutritionistNotFoundException extends RuntimeException {
         this.messageCodes = messageCodes;
         log.error("[NutritionistNotCreatedException] -> message: {} developer message: {}",MessageUtils.getMessage(language,messageCodes),messageCodes);
     }
-
 }
