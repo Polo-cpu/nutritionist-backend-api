@@ -10,6 +10,7 @@ import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,8 +24,9 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 public class CustomerService{
-
+    @Autowired
     private final CustomerMapper customerMapper;
+    @Autowired
     private final CustomerRepository customerRepository;
 
     public List<CustomerEntity> getAll(Language language){

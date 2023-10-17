@@ -1,6 +1,5 @@
 package com.nutritionist.api.service;
 
-import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.NutritionistEntity;
 import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.NutritionistMapper;
@@ -13,11 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class NutritionistServiceTest {

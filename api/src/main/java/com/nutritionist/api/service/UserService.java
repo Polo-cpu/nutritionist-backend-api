@@ -1,26 +1,20 @@
 package com.nutritionist.api.service;
 
 import com.nutritionist.api.exception.IncorrectPasswordException;
-import com.nutritionist.api.exception.ProductNotFoundException;
 import com.nutritionist.api.exception.UserNotFoundException;
 import com.nutritionist.api.model.dto.UserDto;
-import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.entity.UserEntity;
 import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.enums.MessageCodes;
 import com.nutritionist.api.model.enums.Role;
 import com.nutritionist.api.model.mapper.UserMapperImpl;
 import com.nutritionist.api.repository.UserRepository;
-import com.nutritionist.api.security.UserDetailsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 import java.util.Optional;
 

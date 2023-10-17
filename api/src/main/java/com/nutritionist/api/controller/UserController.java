@@ -26,12 +26,15 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController {
-    @Autowired
+
     private final UserService userService;
+    private final Language language;
     @Autowired
-    private final Language language = Language.EN;
+    public UserController(UserService userService){
+        this.userService = userService;
+        this.language = Language.EN;
+    }
     @GetMapping("/all")
     public ResponseEntity<List<UserEntity>> findAll(){
         List<UserEntity> users = userService.getAll(language);

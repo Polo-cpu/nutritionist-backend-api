@@ -4,23 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nutritionist.api.exception.handler.GenericExceptionHandler;
 import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.entity.CustomerEntity;
-
-import com.nutritionist.api.model.entity.NutritionistEntity;
-import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.CustomerMapperImpl;
 import com.nutritionist.api.service.CustomerService;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,17 +26,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-
 import static org.assertj.core.api.Assertions.assertThat;
-
-
 import java.time.LocalDate;
 import java.util.*;
 
@@ -60,9 +47,7 @@ public class CustomerControllerTest {
     private CustomerController customerController;
     @BeforeEach
     public void setup() {
-
         JacksonTester.initFields(this, new ObjectMapper());
-
         mockMvc = MockMvcBuilders.standaloneSetup(customerController)
                 .setControllerAdvice(new GenericExceptionHandler())
                 .build();
@@ -76,9 +61,7 @@ public class CustomerControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn()
                 .getResponse();
-
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-
     }
     @Test
     void getCustomersWithPagination() throws Exception{
@@ -89,7 +72,6 @@ public class CustomerControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn()
                 .getResponse();
-
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
     @Test
@@ -109,7 +91,6 @@ public class CustomerControllerTest {
     void deleteCustomer() throws Exception{
 
         CustomerEntity customer = sampleCustomerList().get(0);
-
         Mockito.when(customerService.deleteById(language,1L)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/1L"))
                 .andExpect((ResultMatcher) MediaType.APPLICATION_JSON)
@@ -121,7 +102,6 @@ public class CustomerControllerTest {
     @Test
     void addCustomer() throws Exception{
         CustomerEntity customer = sampleCustomerList().get(1);
-
         CustomerDto customerDto = new CustomerDto("adam","male",55,175.0,80.00,LocalDate.now(),null,null);
         Mockito.when(customerService.create(language, customerDto)).thenReturn(customer);
         MockHttpServletResponse response = mockMvc.perform(get("/customer/add"))

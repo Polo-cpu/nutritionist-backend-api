@@ -26,5 +26,4 @@ public class NutritionistEntity {
     private Boolean isAvailable;
     @OneToMany(mappedBy = "nutritionist")
     private List<CustomerEntity> customers;
-
 }

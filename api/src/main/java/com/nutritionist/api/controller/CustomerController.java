@@ -19,19 +19,17 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-    private CustomerService customerService;
-    private final Language language = Language.EN;
-
+    private final CustomerService customerService;
+    private final Language language;
     @Autowired
     public CustomerController(CustomerService customerService){
         this.customerService = customerService;
+        this.language = Language.EN;
     }
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CustomerEntity>> getAll(){
         List<CustomerEntity> allCustomers = customerService.getAll(language);
-
         return new ResponseEntity<List<CustomerEntity>>(allCustomers, HttpStatus.OK);
     }
     @GetMapping("/{no}/{size}")
@@ -39,7 +37,6 @@ public class CustomerController {
     public ResponseEntity<Page<CustomerEntity>> getCustomersWithPagination(@PathVariable int no,
                                                                            @PathVariable int size){
         Page<CustomerEntity> customersWithPagination = customerService.getCustomersWithPagination(language, no,size);
-
         return new ResponseEntity<Page<CustomerEntity>>(customersWithPagination, HttpStatus.OK);
     }
 

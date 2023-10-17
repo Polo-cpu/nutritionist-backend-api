@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(
         prePostEnabled = true
 )
-public class SecurityConfig extends WebSecurityConfiguration {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
         return new UserDetailsService();
@@ -32,10 +32,12 @@ public class SecurityConfig extends WebSecurityConfiguration {
 
         return authenticationProvider;
     }
-    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
+    @Override
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
         authenticationManagerBuilder.authenticationProvider(authenticationProvider());
     }
-    protected void configure(HttpSecurity httpSecurity)throws Exception{
+    @Override
+    public void configure(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.authorizeRequests()
                 .antMatchers("/user/create").permitAll()
                 .antMatchers("/customer/all").permitAll()
@@ -54,12 +56,8 @@ public class SecurityConfig extends WebSecurityConfiguration {
                 .antMatchers("/product/create").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/nutritionist/create").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/nutritionist/delete/{}").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/api/v1/product/categoryList").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/api/v1/product/showAllProductsByUsername").hasAuthority("ROLE_USER")
                 .and()
-                .formLogin(form -> form.defaultSuccessUrl("/api/v1/dashboard/main")
-                        .loginPage("/login")
-                );
+                        .servletApi();
         httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().disable();
     }

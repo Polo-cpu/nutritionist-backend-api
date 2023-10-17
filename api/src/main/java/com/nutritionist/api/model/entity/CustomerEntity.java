@@ -38,6 +38,4 @@ public class CustomerEntity {
     @ManyToMany
     @JoinColumn
     private List<ProductEntity> products;
-
-
 }

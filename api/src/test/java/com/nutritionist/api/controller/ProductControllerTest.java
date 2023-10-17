@@ -2,15 +2,11 @@ package com.nutritionist.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nutritionist.api.exception.handler.GenericExceptionHandler;
-import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.ProductDto;
-import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.enums.Language;
-import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.ProductMapper;
 import com.nutritionist.api.model.mapper.ProductMapperImpl;
-import com.nutritionist.api.service.CustomerService;
 import com.nutritionist.api.service.ProductService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

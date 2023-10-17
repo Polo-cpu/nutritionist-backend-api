@@ -20,11 +20,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    private final Language language = Language.EN;
-    private ProductService productService;
+    private final Language language;
+    private final ProductService productService;
     @Autowired
     public ProductController(ProductService productService){
         this.productService = productService;
+        this.language = Language.EN;
     }
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")

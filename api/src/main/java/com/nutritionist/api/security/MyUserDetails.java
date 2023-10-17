@@ -2,6 +2,7 @@ package com.nutritionist.api.security;
 
 import com.nutritionist.api.model.entity.UserEntity;
 import com.nutritionist.api.model.enums.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.Collections;
 
 public class MyUserDetails implements UserDetails {
     private final UserEntity user;
+    @Autowired
     public MyUserDetails(UserEntity user){
         this.user = user;
     }

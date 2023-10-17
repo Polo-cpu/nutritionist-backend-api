@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 @RestController
-@AllArgsConstructor
 @RequestMapping("/nutritionist")
 public class NutritionistController {
+    private final NutritionistService nutritionistService;
+    private final Language language;
     @Autowired
-    private NutritionistService nutritionistService;
-    private final Language language = Language.EN;
+    public NutritionistController(NutritionistService nutritionistService){
+        this.nutritionistService = nutritionistService;
+        this.language = Language.EN;
+    }
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<NutritionistEntity>> getAll(){

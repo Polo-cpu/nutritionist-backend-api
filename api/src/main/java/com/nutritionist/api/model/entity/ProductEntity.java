@@ -27,5 +27,4 @@ public class ProductEntity {
     @ManyToMany
     @JoinColumn()
     private List<CustomerEntity> customers;
-
 }

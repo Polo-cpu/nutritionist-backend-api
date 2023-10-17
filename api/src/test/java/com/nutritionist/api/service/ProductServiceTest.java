@@ -1,13 +1,8 @@
 package com.nutritionist.api.service;
 
-import com.nutritionist.api.model.dto.CustomerDto;
-import com.nutritionist.api.model.dto.ProductDto;
-import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.ProductEntity;
 import com.nutritionist.api.model.enums.Language;
-import com.nutritionist.api.model.mapper.CustomerMapper;
 import com.nutritionist.api.model.mapper.ProductMapper;
-import com.nutritionist.api.repository.CustomerRepository;
 import com.nutritionist.api.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,11 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
