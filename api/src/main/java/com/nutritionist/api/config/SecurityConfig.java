@@ -1,30 +1,42 @@
 package com.nutritionist.api.config;
-import com.nutritionist.api.security.UserDetailsService;
-import lombok.RequiredArgsConstructor;
+
+import com.nutritionist.api.security.JwtAuthFilter;
+import com.nutritionist.api.security.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true
-)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity
+public class SecurityConfig{
+    @Autowired
+    private JwtAuthFilter authFilter;
     @Bean
-    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
-        return new UserDetailsService();
+    public UserDetailsService userDetailsService(){
+        return new UserDetailsServiceImpl();
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
@@ -32,33 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return authenticationProvider;
     }
-    @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
-    }
-    @Override
-    public void configure(HttpSecurity httpSecurity)throws Exception{
-        httpSecurity.authorizeRequests()
-                .antMatchers("/user/create").permitAll()
-                .antMatchers("/customer/all").permitAll()
-                .antMatchers("/customer/{}").permitAll()
-                .antMatchers("/product/{}/{}").permitAll()
-                .antMatchers("/nutritionist/{}/{}").permitAll()
-                .antMatchers("/product/all").permitAll()
-                .antMatchers("/nutritionist/all").permitAll()
-                .antMatchers("/product/find/{}").permitAll()
-                .antMatchers("/customer/create").hasAnyAuthority("ROLE_USER")
-                .antMatchers("/nutritionist/find/{}").hasAnyAuthority("ROLE_USER")
-                .antMatchers("/customer/delete/{}").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/customer/{}").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/user/delete/{}").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/product/delete/{}").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/product/create").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/nutritionist/create").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/nutritionist/delete/{}").hasAnyAuthority("ROLE_ADMIN")
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity httpSecurity)throws Exception{
+        return httpSecurity.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/customer").permitAll()
                 .and()
-                        .servletApi();
-        httpSecurity.csrf().disable();
-        httpSecurity.headers().frameOptions().disable();
+                .authorizeHttpRequests().requestMatchers("/user/authorize")
+                .authenticated().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
 }
