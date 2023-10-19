@@ -1,0 +1,41 @@
+<!-- customer-list.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer List</title>
+</head>
+<body>
+<h1>Customer List</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Height</th>
+        <th>Weight</th>
+        <th>StartOperation</th>
+        <th>Nutritionist</th>
+        <th>Product</th>
+    </tr>
+    <tr th:each="customer : ${customers}">
+        <td th:text="${customer.id}"></td>
+        <td th:text="${customer.name}"></td>
+        <td th:text="${customer.gender}"></td>
+        <td th:text="${customer.height}"></td>
+        <td th:text="${customer.weight}"></td>
+        <td th:text="${customer.startOperation}"></td>
+        <td th:text="${customer.nutritionist}"></td>
+        <td th:text="${customer.product}"></td>
+        <td>
+            <a th:href="@{'/edit/' + ${customer.id}}">Edit</a>
+            <a th:href="@{'/delete/' + ${customer.id}}">Delete</a>
+        </td>
+    </tr>
+</table>
+<a th:href="@{/create}">Create Customer</a>
+<a th:href="@{/all}">All Customers</a>
+<a th:href="@{/{no}/{size}}">Show Customers By Pagination</a>
+<a th:href="@{/{id}}">Get Customer</a>
+<a th:href="@{/{id}}">Delete Customer</a>
+</body>
+</html>
