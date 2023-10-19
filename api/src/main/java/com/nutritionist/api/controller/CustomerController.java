@@ -27,13 +27,11 @@ public class CustomerController {
         this.language = Language.EN;
     }
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<CustomerEntity>> getAll(){
         List<CustomerEntity> allCustomers = customerService.getAll(language);
         return new ResponseEntity<List<CustomerEntity>>(allCustomers, HttpStatus.OK);
     }
     @GetMapping("/{no}/{size}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Page<CustomerEntity>> getCustomersWithPagination(@PathVariable int no,
                                                                            @PathVariable int size){
         Page<CustomerEntity> customersWithPagination = customerService.getCustomersWithPagination(language, no,size);
@@ -41,19 +39,17 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Optional<CustomerEntity>> getById(@PathVariable("id") Long id){
         Optional<CustomerEntity> byId = customerService.getById(language, id);
         return new ResponseEntity<Optional<CustomerEntity>>(byId,HttpStatus.OK);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/add")
+
+    @PostMapping("/create")
     public ResponseEntity<CustomerEntity> addCustomer(@RequestBody CustomerDto customerDto){
         CustomerEntity add = customerService.create(language, customerDto);
 
         return new ResponseEntity<CustomerEntity>(add,HttpStatus.CREATED);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomerEntity> deleteCustomerById(@PathVariable("id") Long id){
         CustomerEntity deletedCustomer = customerService.deleteById(language, id);

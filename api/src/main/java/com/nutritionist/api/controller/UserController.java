@@ -3,10 +3,12 @@ package com.nutritionist.api.controller;
 import com.nutritionist.api.model.dto.AuthRequest;
 import com.nutritionist.api.model.dto.CustomerDto;
 import com.nutritionist.api.model.dto.UserDto;
+import com.nutritionist.api.model.dto.UserResponse;
 import com.nutritionist.api.model.entity.CustomerEntity;
 import com.nutritionist.api.model.entity.UserEntity;
 import com.nutritionist.api.model.enums.Language;
 import com.nutritionist.api.security.JwtService;
+import com.nutritionist.api.service.AuthenticationService;
 import com.nutritionist.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -37,6 +39,8 @@ public class UserController {
     private JwtService jwtService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthenticationService authenticationService;
     private final Language language = Language.EN;
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -75,15 +79,14 @@ public class UserController {
         user.setPassword(password);
         return new ResponseEntity<UserEntity>(user, HttpStatus.ACCEPTED);
     }
-
-    @PostMapping("/authenticate")
-    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUsername());
-        } else {
-            throw new UsernameNotFoundException("invalid user request !");
-        }
-
+    @PostMapping("/save")
+    public ResponseEntity<UserResponse> save(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(authenticationService.save(userDto));
     }
+
+    @PostMapping("/auth")
+    public ResponseEntity<UserResponse> auth(@RequestBody AuthRequest userRequest) {
+        return ResponseEntity.ok(authenticationService.auth(userRequest));
+    }
+
 }

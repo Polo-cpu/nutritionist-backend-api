@@ -22,6 +22,4 @@ public class UserDto {
     @NotNull
     @Size(min = 5, max = 25, message = "Password length should be between 5 and 25 characters")
     private String password;
-    @NotNull
-    private Role role;
 }
